@@ -589,14 +589,14 @@
             if (that.dragging) {
                 that.wrapper.appendChild(that.ghostbar);
                 if (that.dimension == 'width') {
-                        delta = that.verso * (pageOffset - e.clientX);
-                        pageOffset = e.clientX;
+                        delta = that.verso * (pageOffset - e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft);
+                        pageOffset = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
 
                 } else {
                         delta = that.verso * (pageOffset - e.clientY + document.body.scrollTop + document.documentElement.scrollTop);
                         pageOffset = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
                 }
-                that.ghostbar.style[that.position] = parseInt(that.ghostbar.style[that.position]) + delta + 'px';
+                that.ghostbar.style[that.position] = parseFloat(that.ghostbar.style[that.position]) + delta + 'px';
             }
             return false;
         });
