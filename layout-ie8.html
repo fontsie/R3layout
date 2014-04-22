@@ -99,6 +99,7 @@
             -ms-transform: rotate(90deg);
             -o-transform: rotate(90deg);
             transform: rotate(90deg);
+            filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
         }
         .button.top.close:before, .button.bottom.open:before{
             content: "";
@@ -113,6 +114,7 @@
             -ms-transform: rotate(-90deg);
             -o-transform: rotate(-90deg);
             transform: rotate(-90deg);
+            filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
         }
         
         .bottom{
@@ -197,6 +199,7 @@
             -ms-transform: rotate(180deg);
             -o-transform: rotate(180deg);
             transform: rotate(180deg);
+            filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
         }
         .button.right.close:before, .button.left.open:before{
             content: "";
@@ -206,11 +209,6 @@
             height: 100%;
             background: url(icon/arrow.png) center center no-repeat;
             background-size: contain;
-            -webkit-transform: rotate(0deg);
-            -moz-transform: rotate(0deg);
-            -ms-transform: rotate(0deg);
-            -o-transform: rotate(0deg);
-            transform: rotate(0deg);
         }
         
         .left{
