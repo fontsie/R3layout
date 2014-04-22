@@ -558,9 +558,9 @@
                                 value = 0;
                             }
                             if (open) {
-                                value = that.tmp;
+                                value = tmp;
                             } else {
-                                that.tmp = parseInt(that.sidebar.style[that.dimension]);
+                                tmp = parseInt(that.sidebar.style[that.dimension]);
                             }
                         } else if (value > (that.maxDimension - that.dragbarDelta)) {
                             value = that.maxDimension - that.dragbarDelta;
