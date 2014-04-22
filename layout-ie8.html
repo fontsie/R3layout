@@ -476,7 +476,8 @@
         this.addClass(this.closeSidebar, this.position);
         this.dragbar.appendChild(this.closeSidebar);
         this.closeSidebar.onmousedown = function(e){
-            e.stopPropagation();
+            window.event.cancelBubble = true;
+            window.event.returnValue = false;
         }
         this.close = function() {
             var value = parseInt(that.sidebar.style[that.dimension]);
