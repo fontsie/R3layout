@@ -589,8 +589,8 @@
             if (that.dragging) {
                 that.wrapper.appendChild(that.ghostbar);
                 if (that.dimension == 'width') {
-                        delta = that.verso * (pageOffset - e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft);
-                        pageOffset = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                        delta = that.verso * (pageOffset - e.clientX);
+                        pageOffset = e.clientX;
 
                 } else {
                         delta = that.verso * (pageOffset - e.clientY + document.body.scrollTop + document.documentElement.scrollTop);
