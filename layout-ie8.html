@@ -344,7 +344,7 @@
           if (document.readyState=="complete") {
             wrapper(e);
           }
-        };
+        }
         document.attachEvent("onreadystatechange",wrapper2);
         eventListeners.push({object:this,type:type,listener:listener,wrapper:wrapper2});
         
@@ -357,7 +357,7 @@
         this.attachEvent("on"+type,wrapper);
         eventListeners.push({object:this,type:type,listener:listener,wrapper:wrapper});
       }
-    };
+    }
     var removeEventListener=function(type,listener /*, useCapture (will be ignored) */) {
       var counter=0;
       while (counter<eventListeners.length) {
@@ -372,7 +372,7 @@
         }
         ++counter;
       }
-    };
+    }
     Element.prototype.addEventListener=addEventListener;
     Element.prototype.removeEventListener=removeEventListener;
     if (HTMLDocument) {
@@ -384,7 +384,6 @@
       Window.prototype.removeEventListener=removeEventListener;
     }
   }
-}
     
     function R3layout(wrapper, main, sidebar, position) {
         
