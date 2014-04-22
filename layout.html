@@ -5,9 +5,7 @@
     <title>Layout</title>
     <style>
         body,html{width:100%;height:100%;padding:0;margin:0;}
-        .resize {
-            cursor: col-resize;
-        }
+
         
         header{
             position: absolute;
@@ -32,7 +30,10 @@
         }
         .close{
             background-color: SeaGreen;
-            cursor: default;
+            cursor: pointer;
+        }
+        .open{
+            cursor: pointer;
         }
         .close:hover{
             background-color: YellowGreen;
@@ -57,6 +58,9 @@
             width: 100%;
             top: 0;
         }
+        .resize.top {
+            cursor: row-resize;
+        }
         .bar.top{
             height: 8px;
             -webkit-transition: .4s top;
@@ -67,7 +71,6 @@
             width: 25px;
             height: 100%;
             right: 0;
-            /* background image */
         }
         .handler.top {
             left: 50%;
@@ -82,10 +85,42 @@
             -webkit-transition: .4s top;
             transition: .4s top;
         }
+
+        .button.top.open:before, .button.bottom.close:before{
+            content: "";
+            position: absolute;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            background: url(icon/arrow.png) center center no-repeat;
+            background-size: contain;
+            -webkit-transform: rotate(90deg);
+            -moz-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            -o-transform: rotate(90deg);
+            transform: rotate(90deg);
+        }
+        .button.top.close:before, .button.bottom.open:before{
+            content: "";
+            position: absolute;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            background: url(icon/arrow.png) center center no-repeat;
+            background-size: contain;
+            -webkit-transform: rotate(-90deg);
+            -moz-transform: rotate(-90deg);
+            -ms-transform: rotate(-90deg);
+            -o-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+        }
         
         .bottom{
             width: 100%;
             bottom: 0;
+        }
+        .resize.bottom {
+            cursor: row-resize;
         }
         .bar.bottom{
             height: 8px;
@@ -121,6 +156,9 @@
             height: 100%;
             right: 0;
         }
+        .resize.right {
+            cursor: col-resize;
+        }
         .bar.right{
             width: 8px;
             -webkit-transition: .4s right;
@@ -146,9 +184,41 @@
             transition: .4s right;
         }
         
+        .button.right.open:before, .button.left.close:before{
+            content: "";
+            position: absolute;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            background: url(icon/arrow.png) center center no-repeat;
+            background-size: contain;
+            -webkit-transform: rotate(180deg);
+            -moz-transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            -o-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+        .button.right.close:before, .button.left.open:before{
+            content: "";
+            position: absolute;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            background: url(icon/arrow.png) center center no-repeat;
+            background-size: contain;
+            -webkit-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        
         .left{
             height: 100%;
             left: 0;
+        }
+        .resize.left {
+            cursor: col-resize;
         }
         .bar.left{
             width: 8px;
@@ -281,6 +351,13 @@
         e.className = c.trim();
     }
     
+    R3layout.prototype.removeClass = function(e,classe) {
+        var c = e.className;
+        var regexp = new RegExp(classe + '\s?');
+        c = c.replace(regexp, '');
+        e.className = c.trim();
+    }
+    
     R3layout.prototype.init = function(){
         if (this.sidebar.parentNode != this.wrapper || this.sidebar.parentNode != this.wrapper) {
             console.log('error element not correct')
@@ -316,7 +393,6 @@
         this.addClass(this.closeSidebar, 'button');
         this.addClass(this.closeSidebar, 'close');
         this.addClass(this.closeSidebar, this.position);
-        this.closeSidebar.textContent = '>';
         this.dragbar.appendChild(this.closeSidebar);
         this.closeSidebar.onmousedown = function(e){
             e.stopPropagation();
@@ -326,7 +402,8 @@
             that.sidebar.style[that.dimension] = '0';
             that.main.style[that.position] =  '0';
             that.dragbar.style[that.position] = '0';
-            that.closeSidebar.textContent = '<';
+            that.removeClass(that.closeSidebar, 'close');
+            that.addClass(that.closeSidebar, 'open');
             that.open = function(e) {
                 if (value != "") {
                     that.sidebar.style[that.dimension] = value + 'px';
@@ -337,7 +414,8 @@
                     that.ghostbar.main.style[that.position] = that.defaultDimension + that.dragbarDelta + 'px';
                     that.dragbar.style[that.position] = that.defaultDimension + 'px';
                 }
-                that.closeSidebar.textContent = '>';
+                that.removeClass(that.closeSidebar, 'open');
+                that.addClass(that.closeSidebar, 'close');
                 that.closeSidebar.onclick = that.close;
             }
             that.closeSidebar.onclick = that.open;
@@ -365,7 +443,8 @@
             that.dragging = true;
             if (that.sidebar.style[that.dimension] == '0px') {
                 if (that.closeSidebar) {
-                    that.closeSidebar.textContent = '>';
+                    that.removeClass(that.closeSidebar, 'close');
+                    that.addClass(that.closeSidebar, 'open');
                 }
                 open = true;
             }
@@ -402,6 +481,8 @@
                         }
                         if (open && that.closeSidebar) {
                             that.closeSidebar.onclick = that.close;
+                            that.removeClass(that.closeSidebar, 'open');
+                            that.addClass(that.closeSidebar, 'close');
                         }
                         open = false;
                         that.sidebar.style[that.dimension] = value + 'px';
