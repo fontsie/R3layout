@@ -304,6 +304,10 @@
     //TODO la somma di botton/top || left/right non deve superare il totale
     //TODO set defaultDimension
     
+    Element.prototype.remove = function() {
+        this.parentElement.removeChild(this);
+    }
+    
     function R3layout(wrapper, main, sidebar, position) {
         
         this.wrapper = wrapper;
