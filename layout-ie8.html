@@ -551,10 +551,8 @@
                         if (value < 100) {
                             if (that.closeSidebar) {                            
                                 that.closeSidebar.click();
-                                if (!open) {
-                                    that.ghostbar.remove();
-                                }
-                                    return;    
+                                that.ghostbar.remove();
+                                return;    
                             } else {
                                 value = 0;
                             }
