@@ -304,6 +304,12 @@
     //TODO la somma di botton/top || left/right non deve superare il totale
     //TODO set defaultDimension
     
+    if (!String.prototype.trim) {
+        String.prototype.trim = function () {
+            return this.replace(/^\s+|\s+$/g, '');
+        };
+    }
+    
     function R3layout(wrapper, main, sidebar, position) {
         
         this.wrapper = wrapper;
