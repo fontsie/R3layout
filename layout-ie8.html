@@ -309,6 +309,7 @@
             return this.replace(/^\s+|\s+$/g, '');
         };
     }
+    
     (function() {
   if (!Event.prototype.preventDefault) {
     Event.prototype.preventDefault=function() {
@@ -516,7 +517,6 @@
         var that = this;
         
         this.dragbar.onmousedown = function(e){
-            e.preventDefault();
             that.dragging = true;
             if (that.sidebar.style[that.dimension] == '0px') {
                 if (that.closeSidebar) {
