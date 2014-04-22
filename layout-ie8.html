@@ -532,10 +532,10 @@
             that.addClass(that.ghostbar, 'ghostbar');
             delta = 0;
             if (that.dimension == 'width') {
-                    pageOffset = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                    pageOffset = window.event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
 
             } else {
-                    pageOffset = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+                    pageOffset = window.event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
 
             }
             var drag = function(e){
@@ -582,12 +582,12 @@
             if (that.dragging) {
                 that.wrapper.appendChild(that.ghostbar);
                 if (that.dimension == 'width') {
-                        delta = that.verso * (pageOffset - e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft);
-                        pageOffset = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                        delta = that.verso * (pageOffset - window.event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft);
+                        pageOffset = window.event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
 
                 } else {
-                        delta = that.verso * (pageOffset - e.clientY + document.body.scrollTop + document.documentElement.scrollTop);
-                        pageOffset = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+                        delta = that.verso * (pageOffset - window.event.clientY + document.body.scrollTop + document.documentElement.scrollTop);
+                        pageOffset = window.event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
                 }
                 that.ghostbar.style[that.position] = parseInt(that.ghostbar.style[that.position]) + delta + 'px';
             }
