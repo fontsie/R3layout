@@ -311,7 +311,7 @@
     }
     
     Element.prototype.remove = function() {
-        this.parentElement.removeChild(this);
+        this.parentNode.removeChild(this);
     }
     
 
@@ -546,9 +546,9 @@
                         var value = parseInt(that.ghostbar.style[that.position]);
                         if (value < 100) {
                             if (that.closeSidebar) {                            
-                                that.ghostbar.remove();
                                 that.closeSidebar.click();
                                 if (!open) {
+                                    that.ghostbar.remove();
                                     return;    
                                 }
                             } else {
@@ -571,7 +571,9 @@
                         that.sidebar.style[that.dimension] = value + 'px';
                         that.main.style[that.position] = value + that.dragbarDelta + 'px';
                         that.dragbar.style[that.position] = value + 'px';
-                        that.ghostbar.remove();
+                        if(that.ghostbar.parentNode) {
+                            that.ghostbar.remove();
+                        }
                     }
                     document.body.removeEventListener('mouseup', drag);
                 }
