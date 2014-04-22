@@ -529,9 +529,19 @@
             that.addClass(that.ghostbar, 'ghostbar');
             delta = 0;
             if (that.dimension == 'width') {
-                pageOffset = e.pageX;    
+                if (e.pageX) {
+                    pageOffset = e.pageX;
+                }
+                else if (e.clientX) {
+                    pageOffset = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                }
             } else {
-                pageOffset = e.pageY;
+                if (e.pageY) {
+                    pageOffset = e.pageY;
+                }
+                else if (e.clientY) {
+                    pageOffset = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+                }
             }
             var drag = function(e){
                     if (that.dragging) {
@@ -577,11 +587,24 @@
             if (that.dragging) {
                 that.wrapper.appendChild(that.ghostbar);
                 if (that.dimension == 'width') {
-                    delta = that.verso * (pageOffset - e.pageX);
-                    pageOffset = e.pageX;
+                    if (e.pageX) {
+                        delta = that.verso * (pageOffset - e.pageX);
+                        pageOffset = e.pageX;
+                    }
+                    else if (e.clientX) {
+                        delta = that.verso * (pageOffset - e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft);
+                        pageOffset = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                    }
+
                 } else {
-                    delta = that.verso * (pageOffset - e.pageY);
-                    pageOffset = e.pageY;
+                    if (e.pageY) {
+                        delta = that.verso * (pageOffset - e.pageY);
+                        pageOffset = e.pageY;
+                    }
+                    else if (e.clientY) {
+                        delta = that.verso * (pageOffset - e.clientY + document.body.scrollTop + document.documentElement.scrollTop);
+                        pageOffset = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+                    }
                 }
                 that.ghostbar.style[that.position] = parseInt(that.ghostbar.style[that.position]) + delta + 'px';
             }
