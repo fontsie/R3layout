@@ -484,7 +484,7 @@
             e.stopPropagation();
         }
         this.close = function() {
-            var value = parseInt(that.sidebar.style[that.dimension]);
+            var value = parseFloat(that.sidebar.style[that.dimension]);
             that.sidebar.style[that.dimension] = '0';
             that.main.style[that.position] =  '0';
             that.dragbar.style[that.position] = '0';
@@ -546,7 +546,7 @@
                     if (that.dragging) {
                         that.dragging = false;
                         var tmp = value;
-                        var value = parseInt(that.ghostbar.style[that.position]);
+                        var value = parseFloat(that.ghostbar.style[that.position]);
                         if (value < 100) {
                             if (that.closeSidebar) {                            
                                 that.closeSidebar.click();
@@ -560,7 +560,7 @@
                             if (open) {
                                 value = tmp;
                             } else {
-                                tmp = parseInt(that.sidebar.style[that.dimension]);
+                                tmp = parseFloat(that.sidebar.style[that.dimension]);
                             }
                         } else if (value > (that.maxDimension - that.dragbarDelta)) {
                             value = that.maxDimension - that.dragbarDelta;
