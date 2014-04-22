@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Layout</title>
+    <!--[if lte IE 8]>
+        <script src="js/forIE.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="css/R3layout.css">
+    <script src="js/R3layout.js"></script>
+    <style>
+        body,html{width:100%;height:100%;padding:0;margin:0;}
+
+        
+        #header{
+            position: absolute;
+            top: 0;
+            height: 40px;
+            width: 100%;
+        }
+        #wrapper{
+            position: absolute;
+            top:40px;            
+            bottom: 40px;
+            width: 80%;
+            left: 100px;
+        }
+        
+        #wrapper-bar{
+            position: relative;
+            height: 100%;
+            background-color: #ccc;
+        }
+        
+        #logo{
+            background-color: #32d212;
+
+        }
+        
+        #content{
+            background-color: #fff;
+        }
+        
+        #minimap {
+            background-color: #213d12;
+        }
+        
+        #footer{
+            position: absolute;
+            height: 40px;
+            width: 100%;
+            bottom: 0;
+            background-color: Maroon;
+        }
+    </style>
+    
+</head>
+<body>
+
+    <div id="header"></div>
+    <div id="wrapper">
+        <div id="main">
+        </div>
+        <div id="sidebar">
+            <div id="wrapper-bar">
+                <div id="logo"></div>
+                <div id="content"></div>
+                <div id="minimap"></div>
+            </div>
+        </div>
+    </div>
+    <div id="footer"></div>
+    <script>
+    var wrapper = document.getElementById('wrapper');
+    var main = document.getElementById('main');
+    var sidebar = document.getElementById('sidebar');
+    var k = new R3_layout(wrapper,main,sidebar);
+    k.resizable();
+    k.collapsible();
+    
+    var wrapper2 = document.getElementById('wrapper-bar');
+    var main2 = document.getElementById('content');
+    var sidebar3 = document.getElementById('minimap');
+    var w = new R3_layout(wrapper2,main2,sidebar3, 'bottom');
+    w.resizable();
+    
+    var sidebar2 = document.getElementById('logo');
+    var y = new R3_layout(wrapper2,main2,sidebar2, 'top');
+    y.collapsible();
+    </script>
+</body>
+</html>
