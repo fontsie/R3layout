@@ -521,19 +521,19 @@
         this.dragging = false;
         var pageOffset;
         var delta;
-        var op = false;
+        var open = false;
         var that = this;
         
         this.dragbar.onmousedown = function(e){
             e = e || window.event;
             that.dragging = true;
-            console.log(that.sidebar.style[that.dimension])
             if (that.sidebar.style[that.dimension] == '0px') {
                 if (that.closeSidebar) {
                     that.removeClass(that.closeSidebar, 'close');
                     that.addClass(that.closeSidebar, 'open');
                 }
-                op = true;
+                open = true;
+                console.log('open true')
             }
             that.ghostbar = that.dragbar.cloneNode(true);
             that.addClass(that.ghostbar, 'ghostbar');
@@ -551,14 +551,14 @@
                         if (value < 100) {
                             if (that.closeSidebar) {                            
                                 that.closeSidebar.click();
-                                if (!op) {
+                                if (!open) {
                                     that.ghostbar.remove();
                                     return;    
                                 }
                             } else {
                                 value = 0;
                             }
-                            if (op) {
+                            if (open) {
                                 value = tmp;
                             } else {
                                 tmp = parseFloat(that.sidebar.style[that.dimension]);
@@ -566,12 +566,14 @@
                         } else if (value > (that.maxDimension - that.dragbarDelta)) {
                             value = that.maxDimension - that.dragbarDelta;
                         }
-                        if (op && that.closeSidebar) {
+                        if (open && that.closeSidebar) {
                             that.closeSidebar.onclick = that.close;
                             that.removeClass(that.closeSidebar, 'open');
                             that.addClass(that.closeSidebar, 'close');
                         }
-                        op = false;
+                        console.log(value);
+                        open = false;
+                                        console.log('open false')
                         that.sidebar.style[that.dimension] = value + 'px';
                         that.main.style[that.position] = value + that.dragbarDelta + 'px';
                         that.dragbar.style[that.position] = value + 'px';
