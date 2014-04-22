@@ -527,6 +527,7 @@
         this.dragbar.onmousedown = function(e){
             e = e || window.event;
             that.dragging = true;
+            console.log(that.sidebar.style[that.dimension])
             if (that.sidebar.style[that.dimension] == '0px') {
                 if (that.closeSidebar) {
                     that.removeClass(that.closeSidebar, 'close');
