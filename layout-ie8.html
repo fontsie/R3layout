@@ -553,12 +553,14 @@
                                 that.closeSidebar.click();
                                 if (!open) {
                                     that.ghostbar.remove();
-                                    return;    
                                 }
+                                    return;    
                             } else {
                                 value = 0;
                             }
                             if (open) {
+                                console.log(value)
+                                console.log(tmp)
                                 value = tmp;
                             } else {
                                 tmp = parseFloat(that.sidebar.style[that.dimension]);
