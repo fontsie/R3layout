@@ -310,80 +310,85 @@
         };
     }
     
-    Element.prototype.remove = function() {
-        this.parentNode.removeChild(this);
+    if (!Element.prototype.remove){
+        Element.prototype.remove = function() {
+            this.parentNode.removeChild(this);
+        }
     }
     
-
-  if (!Event.prototype.preventDefault) {
-    Event.prototype.preventDefault=function() {
-      this.returnValue=false;
-    };
-  }
-  if (!Event.prototype.stopPropagation) {
-    Event.prototype.stopPropagation=function() {
-      this.cancelBubble=true;
-    };
-  }
-  if (!Element.prototype.addEventListener) {
-    var eventListeners=[];
-    
-    var addEventListener=function(type,listener /*, useCapture (will be ignored) */) {
-      var self=this;
-      var wrapper=function(e) {
-        e.target=e.srcElement;
-        e.currentTarget=self;
-        if (listener.handleEvent) {
-          listener.handleEvent(e);
-        } else {
-          listener.call(self,e);
+    if (!Event.prototype.preventDefault) {
+        Event.prototype.preventDefault=function() {
+            this.returnValue = false;
         }
-      };
-      if (type=="DOMContentLoaded") {
-        var wrapper2=function(e) {
-          if (document.readyState=="complete") {
-            wrapper(e);
-          }
+    }
+  
+    if (!Event.prototype.stopPropagation) {
+        Event.prototype.stopPropagation=function() {
+            this.cancelBubble=true;
         }
-        document.attachEvent("onreadystatechange",wrapper2);
-        eventListeners.push({object:this,type:type,listener:listener,wrapper:wrapper2});
+    }
+  
+    if (!Element.prototype.addEventListener) {
+        var eventListeners=[];
+        var addEventListener=function(type,listener /*, useCapture (will be ignored) */) {
+            var self=this;
+            var wrapper=function(e) {
+                e.target=e.srcElement;
+                e.currentTarget=self;
+                if (listener.handleEvent) {
+                    listener.handleEvent(e);
+                } else {
+                    listener.call(self,e);
+                }
+            }
+            if (type=="DOMContentLoaded") {
+                var wrapper2=function(e) {
+                    if (document.readyState=="complete") {
+                        wrapper(e);
+                    }
+                }
+                document.attachEvent("onreadystatechange",wrapper2);
+                eventListeners.push({object:this,type:type,listener:listener,wrapper:wrapper2});
         
-        if (document.readyState=="complete") {
-          var e=new Event();
-          e.srcElement=window;
-          wrapper2(e);
+                if (document.readyState=="complete") {
+                    var e=new Event();
+                    e.srcElement=window;
+                    wrapper2(e);
+                }
+            } else {
+                this.attachEvent("on"+type,wrapper);
+                eventListeners.push({object:this,type:type,listener:listener,wrapper:wrapper});
+            }
         }
-      } else {
-        this.attachEvent("on"+type,wrapper);
-        eventListeners.push({object:this,type:type,listener:listener,wrapper:wrapper});
-      }
-    }
-    var removeEventListener=function(type,listener /*, useCapture (will be ignored) */) {
-      var counter=0;
-      while (counter<eventListeners.length) {
-        var eventListener=eventListeners[counter];
-        if (eventListener.object==this && eventListener.type==type && eventListener.listener==listener) {
-          if (type=="DOMContentLoaded") {
-            this.detachEvent("onreadystatechange",eventListener.wrapper);
-          } else {
-            this.detachEvent("on"+type,eventListener.wrapper);
-          }
-          break;
+        
+        var removeEventListener=function(type,listener /*, useCapture (will be ignored) */) {
+            var counter=0;
+            while (counter<eventListeners.length) {
+                var eventListener=eventListeners[counter];
+                if (eventListener.object==this && eventListener.type==type && eventListener.listener==listener) {
+                    if (type=="DOMContentLoaded") {
+                        this.detachEvent("onreadystatechange",eventListener.wrapper);
+                    } else {
+                        this.detachEvent("on"+type,eventListener.wrapper);
+                    }
+                    break;
+                }
+                ++counter;
+            }
         }
-        ++counter;
-      }
+    
+        Element.prototype.addEventListener=addEventListener;
+        Element.prototype.removeEventListener=removeEventListener;
+        
+        if (HTMLDocument) {
+            HTMLDocument.prototype.addEventListener=addEventListener;
+            HTMLDocument.prototype.removeEventListener=removeEventListener;
+        }
+        if (Window) {
+            Window.prototype.addEventListener=addEventListener;
+            Window.prototype.removeEventListener=removeEventListener;
+        }
     }
-    Element.prototype.addEventListener=addEventListener;
-    Element.prototype.removeEventListener=removeEventListener;
-    if (HTMLDocument) {
-      HTMLDocument.prototype.addEventListener=addEventListener;
-      HTMLDocument.prototype.removeEventListener=removeEventListener;
-    }
-    if (Window) {
-      Window.prototype.addEventListener=addEventListener;
-      Window.prototype.removeEventListener=removeEventListener;
-    }
-  }
     
     function R3layout(wrapper, main, sidebar, position) {
         
@@ -395,8 +400,7 @@
             this.position = position;
         } else {
             this.position = 'right';
-        }
-        
+        }        
         this.setPosition();
     }
     
@@ -476,8 +480,8 @@
         this.addClass(this.closeSidebar, this.position);
         this.dragbar.appendChild(this.closeSidebar);
         this.closeSidebar.onmousedown = function(e){
-            window.event.cancelBubble = true;
-            window.event.returnValue = false;
+            e = e || window.event;
+            e.stopPropagation();
         }
         this.close = function() {
             var value = parseInt(that.sidebar.style[that.dimension]);
@@ -486,7 +490,7 @@
             that.dragbar.style[that.position] = '0';
             that.removeClass(that.closeSidebar, 'close');
             that.addClass(that.closeSidebar, 'open');
-            that.open = function(e) {
+            that.open = function() {
                 if (value != "") {
                     that.sidebar.style[that.dimension] = value + 'px';
                     that.main.style[that.position] = value + that.dragbarDelta + 'px';
@@ -521,6 +525,7 @@
         var that = this;
         
         this.dragbar.onmousedown = function(e){
+            e = e || window.event;
             that.dragging = true;
             if (that.sidebar.style[that.dimension] == '0px') {
                 if (that.closeSidebar) {
@@ -533,13 +538,11 @@
             that.addClass(that.ghostbar, 'ghostbar');
             delta = 0;
             if (that.dimension == 'width') {
-                    pageOffset = window.event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-
+                pageOffset = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
             } else {
-                    pageOffset = window.event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-
+                pageOffset = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
             }
-            var drag = function(e){
+            var drag = function(){
                     if (that.dragging) {
                         that.dragging = false;
                         var tmp = value;
@@ -582,15 +585,16 @@
         }
     
         this.wrapper.addEventListener('mousemove', function(e) {
+            e = e || window.event;
             if (that.dragging) {
                 that.wrapper.appendChild(that.ghostbar);
                 if (that.dimension == 'width') {
-                        delta = that.verso * (pageOffset - window.event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft);
-                        pageOffset = window.event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+                        delta = that.verso * (pageOffset - e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft);
+                        pageOffset = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
 
                 } else {
-                        delta = that.verso * (pageOffset - window.event.clientY + document.body.scrollTop + document.documentElement.scrollTop);
-                        pageOffset = window.event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+                        delta = that.verso * (pageOffset - e.clientY + document.body.scrollTop + document.documentElement.scrollTop);
+                        pageOffset = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
                 }
                 that.ghostbar.style[that.position] = parseInt(that.ghostbar.style[that.position]) + delta + 'px';
             }
