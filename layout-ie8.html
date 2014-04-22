@@ -521,7 +521,7 @@
         this.dragging = false;
         var pageOffset;
         var delta;
-        var open = false;
+        var op = false;
         var that = this;
         
         this.dragbar.onmousedown = function(e){
@@ -533,7 +533,7 @@
                     that.removeClass(that.closeSidebar, 'close');
                     that.addClass(that.closeSidebar, 'open');
                 }
-                open = true;
+                op = true;
             }
             that.ghostbar = that.dragbar.cloneNode(true);
             that.addClass(that.ghostbar, 'ghostbar');
@@ -551,14 +551,14 @@
                         if (value < 100) {
                             if (that.closeSidebar) {                            
                                 that.closeSidebar.click();
-                                if (!open) {
+                                if (!op) {
                                     that.ghostbar.remove();
                                     return;    
                                 }
                             } else {
                                 value = 0;
                             }
-                            if (open) {
+                            if (op) {
                                 value = tmp;
                             } else {
                                 tmp = parseFloat(that.sidebar.style[that.dimension]);
@@ -566,12 +566,12 @@
                         } else if (value > (that.maxDimension - that.dragbarDelta)) {
                             value = that.maxDimension - that.dragbarDelta;
                         }
-                        if (open && that.closeSidebar) {
+                        if (op && that.closeSidebar) {
                             that.closeSidebar.onclick = that.close;
                             that.removeClass(that.closeSidebar, 'open');
                             that.addClass(that.closeSidebar, 'close');
                         }
-                        open = false;
+                        op = false;
                         that.sidebar.style[that.dimension] = value + 'px';
                         that.main.style[that.position] = value + that.dragbarDelta + 'px';
                         that.dragbar.style[that.position] = value + 'px';
