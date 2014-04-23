@@ -1,4 +1,4 @@
-.R3_wrapper{
+.R3_wrapper, .R3_sidebar{
     overflow: hidden;
 }
 .R3_main{
@@ -252,4 +252,13 @@
     z-index:999;
     -webkit-transition: none;
     transition: none;
+}
+
+.R3_ghostwrapper{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 998;
 }

@@ -29,12 +29,16 @@ if (!Element.prototype.addClass){
     }
 }
 
-function R3_layout(wrapper, main, sidebar, position) {
+function R3layout(wrapper, main, sidebar, position, minSize) {
     
     this.wrapper = wrapper;
     this.main = main;
     this.sidebar = sidebar;
-    this.defaultDimension = 200;
+    if (minSize) {
+        this.setMinSize(minSize);
+    } else {
+        this.defaultDimension = 200;    
+    }
     if (position) {
         this.position = position;
     } else {
@@ -43,7 +47,7 @@ function R3_layout(wrapper, main, sidebar, position) {
     this.setPosition();
 }
 
-R3_layout.prototype.setPosition = function(){
+R3layout.prototype.setPosition = function(){
     this.verso = -1;
     switch (this.position) {
         case 'right':
@@ -66,11 +70,11 @@ R3_layout.prototype.setPosition = function(){
     this.init();
 }
 
-R3_layout.prototype.setMinDimension = function(n){
+R3layout.prototype.setMinSize = function(n){
     this.defaultDimension = n;
 }
 
-R3_layout.prototype.init = function(){
+R3layout.prototype.init = function(){
     if (this.sidebar.parentNode != this.wrapper || this.sidebar.parentNode != this.wrapper) {
         console.log('error element not correct')
         return;
@@ -99,7 +103,7 @@ R3_layout.prototype.init = function(){
     
 }
 
-R3_layout.prototype.collapsible = function() {
+R3layout.prototype.collapsible = function(callback) {
     var that = this;
     this.closeSidebar = document.createElement('div');
     this.closeSidebar.addClass('R3_button');
@@ -113,7 +117,7 @@ R3_layout.prototype.collapsible = function() {
     this.close = function() {
         var value = parseFloat(that.sidebar.style[that.dimension]);
         that.sidebar.style[that.dimension] = '0';
-        that.main.style[that.position] =  '0';
+        that.main.style[that.position] = that.dragbarDelta + 'px';
         that.dragbar.style[that.position] = '0';
         that.closeSidebar.removeClass('R3_close');
         that.closeSidebar.addClass('R3_open');
@@ -130,14 +134,20 @@ R3_layout.prototype.collapsible = function() {
             that.closeSidebar.removeClass('R3_open');
             that.closeSidebar.addClass('R3_close');
             that.closeSidebar.onclick = that.close;
+            if (callback) {
+                callback();
+            }
         }
         that.closeSidebar.onclick = that.open;
+        if (callback) {
+            callback();
+        }
     }
     
     this.closeSidebar.onclick = this.close;
 }
 
-R3_layout.prototype.resizable = function() {
+R3layout.prototype.resizable = function(callback) {
     this.dragbar.addClass('R3_resize');
     this.handlerResize = document.createElement('div');
     this.handlerResize.addClass('R3_button');
@@ -145,6 +155,8 @@ R3_layout.prototype.resizable = function() {
     this.handlerResize.addClass('R3_'+this.position);
     this.dragbar.appendChild(this.handlerResize);
     this.ghostbar;
+    this.ghostWrapper = document.createElement('div');
+    this.ghostWrapper.addClass('R3_ghostwrapper');
     this.dragging = false;
     var pageOffset;
     var delta;
@@ -162,6 +174,7 @@ R3_layout.prototype.resizable = function() {
             }
             open = true;
         }
+        that.wrapper.appendChild(that.ghostWrapper);
         that.ghostbar = that.dragbar.cloneNode(true);
         that.ghostbar.addClass('R3_ghostbar');
         delta = 0;
@@ -173,6 +186,7 @@ R3_layout.prototype.resizable = function() {
         var drag = function(){
                 if (that.dragging) {
                     that.dragging = false;
+                    that.ghostWrapper.remove();
                     var value = parseFloat(that.ghostbar.style[that.position]);
                     if (value < 100) {
                         if (that.closeSidebar) {                            
@@ -204,12 +218,15 @@ R3_layout.prototype.resizable = function() {
                     }
                 }
                 document.body.removeEventListener('mouseup', drag);
+                if (callback) {
+                    callback();
+                }
             }
             document.body.addEventListener('mouseup', drag);
         return false;
     }
 
-    this.wrapper.addEventListener('mousemove', function(e) {
+    this.ghostWrapper.addEventListener('mousemove', function(e) {
         e = e || window.event;
         if (that.dragging) {
             that.wrapper.appendChild(that.ghostbar);

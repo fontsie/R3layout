@@ -74,19 +74,19 @@
     var wrapper = document.getElementById('wrapper');
     var main = document.getElementById('main');
     var sidebar = document.getElementById('sidebar');
-    var k = new R3_layout(wrapper,main,sidebar);
+    var k = new R3layout(wrapper,main,sidebar);
     k.resizable();
     k.collapsible();
     
     var wrapper2 = document.getElementById('wrapper-bar');
     var main2 = document.getElementById('content');
     var sidebar3 = document.getElementById('minimap');
-    var w = new R3_layout(wrapper2,main2,sidebar3, 'bottom');
+    var w = new R3layout(wrapper2,main2,sidebar3, 'bottom');
     w.resizable();
     
     var sidebar2 = document.getElementById('logo');
-    var y = new R3_layout(wrapper2,main2,sidebar2, 'top');
-    y.resizable();
+    var y = new R3layout(wrapper2,main2,sidebar2, 'top');
+    y.collapsible();
     </script>
 </body>
 </html>
