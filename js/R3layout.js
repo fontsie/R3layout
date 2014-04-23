@@ -150,6 +150,7 @@ R3_layout.prototype.resizable = function() {
     var delta;
     var open = false;
     var that = this;
+    var tmp;
     
     this.dragbar.onmousedown = function(e){
         e = e || window.event;
@@ -172,7 +173,6 @@ R3_layout.prototype.resizable = function() {
         var drag = function(){
                 if (that.dragging) {
                     that.dragging = false;
-                    var tmp = value;
                     var value = parseFloat(that.ghostbar.style[that.position]);
                     if (value < 100) {
                         if (that.closeSidebar) {                            
