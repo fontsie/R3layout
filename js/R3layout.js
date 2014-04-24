@@ -6,16 +6,16 @@
 if (!Element.prototype.remove){
     Element.prototype.remove = function() {
         this.parentNode.removeChild(this);
-    }
+    };
 }
 
 if (!Element.prototype.removeClass){
     Element.prototype.removeClass = function(c) {
         var classes = this.className;
-        var regexp = new RegExp(c + '\s?');
+        var regexp = new RegExp(c + '\\s?');
         classes = classes.replace(regexp, '');
         this.className = classes.trim();
-    }
+    };
 }
 
 if (!Element.prototype.addClass){
@@ -26,7 +26,7 @@ if (!Element.prototype.addClass){
             classes += ' ' + c;
         }
         this.className = classes.trim();
-    }
+    };
 }
 
 function R3layout(wrapper, main, sidebar, position, minSize) {
@@ -52,6 +52,7 @@ R3layout.prototype.setPosition = function(){
     switch (this.position) {
         case 'right':
             this.verso = 1;
+            /* falls through */
         case 'left' :
             this.dimension = 'width';
             this.maxDimension = this.wrapper.clientWidth;
@@ -59,6 +60,7 @@ R3layout.prototype.setPosition = function(){
         
         case 'bottom':
             this.verso = 1;
+            /* falls through */
         case 'top'   :
             this.dimension = 'height';
             this.maxDimension = this.wrapper.clientHeight;
@@ -68,15 +70,15 @@ R3layout.prototype.setPosition = function(){
             console.log('error position:' + this.position);
     }
     this.init();
-}
+};
 
 R3layout.prototype.setMinSize = function(n){
     this.defaultDimension = n;
-}
+};
 
 R3layout.prototype.init = function(){
     if (this.sidebar.parentNode != this.wrapper || this.sidebar.parentNode != this.wrapper) {
-        console.log('error element not correct')
+        console.log('error element not correct');
         return;
     }
     this.dragbar = document.createElement('div');
@@ -84,7 +86,7 @@ R3layout.prototype.init = function(){
     this.dragbar.addClass('R3_'+this.position);
     this.dragbar.style[this.position] = this.defaultDimension + 'px';
     this.wrapper.appendChild(this.dragbar);
-    this.dragbarDelta;
+    this.dragbarDelta = null;
     if (this.dimension == 'width') {
         this.dragbarDelta = this.dragbar.offsetWidth;
     } else {
@@ -101,7 +103,7 @@ R3layout.prototype.init = function(){
     this.sidebar.style[this.dimension] = this.defaultDimension + 'px';
     this.main.style[this.position] = this.defaultDimension + this.dragbarDelta + 'px';
     
-}
+};
 
 R3layout.prototype.collapsible = function(callback) {
     var that = this;
@@ -113,7 +115,7 @@ R3layout.prototype.collapsible = function(callback) {
     this.closeSidebar.onmousedown = function(e){
         e = e || window.event;
         e.stopPropagation();
-    }
+    };
     this.close = function() {
         var value = parseFloat(that.sidebar.style[that.dimension]);
         that.sidebar.style[that.dimension] = '0';
@@ -122,7 +124,7 @@ R3layout.prototype.collapsible = function(callback) {
         that.closeSidebar.removeClass('R3_close');
         that.closeSidebar.addClass('R3_open');
         that.open = function() {
-            if (value != "") {
+            if (!value) {
                 that.sidebar.style[that.dimension] = value + 'px';
                 that.main.style[that.position] = value + that.dragbarDelta + 'px';
                 that.dragbar.style[that.position] = value + 'px';
@@ -137,15 +139,15 @@ R3layout.prototype.collapsible = function(callback) {
             if (callback) {
                 callback();
             }
-        }
+        };
         that.closeSidebar.onclick = that.open;
         if (callback) {
             callback();
         }
-    }
+    };
     
     this.closeSidebar.onclick = this.close;
-}
+};
 
 R3layout.prototype.resizable = function(callback) {
     this.dragbar.addClass('R3_resize');
@@ -154,7 +156,7 @@ R3layout.prototype.resizable = function(callback) {
     this.handlerResize.addClass('R3_handler');
     this.handlerResize.addClass('R3_'+this.position);
     this.dragbar.appendChild(this.handlerResize);
-    this.ghostbar;
+    this.ghostbar = null;
     this.ghostWrapper = document.createElement('div');
     this.ghostWrapper.addClass('R3_ghostwrapper');
     this.dragging = false;
@@ -221,10 +223,10 @@ R3layout.prototype.resizable = function(callback) {
                 if (callback) {
                     callback();
                 }
-            }
+            };
             document.body.addEventListener('mouseup', drag);
         return false;
-    }
+    };
 
     this.ghostWrapper.addEventListener('mousemove', function(e) {
         e = e || window.event;
@@ -243,4 +245,4 @@ R3layout.prototype.resizable = function(callback) {
         return false;
     });
 
-}
+};
