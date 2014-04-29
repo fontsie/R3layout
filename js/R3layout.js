@@ -124,7 +124,7 @@ R3layout.prototype.collapsible = function(callback) {
         that.closeSidebar.removeClass('R3_close');
         that.closeSidebar.addClass('R3_open');
         that.open = function() {
-            if (!value) {
+            if (value !== "") {
                 that.sidebar.style[that.dimension] = value + 'px';
                 that.main.style[that.position] = value + that.dragbarDelta + 'px';
                 that.dragbar.style[that.position] = value + 'px';
